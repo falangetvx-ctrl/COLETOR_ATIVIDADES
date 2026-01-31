@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Coletor de Certificados — Falange</title>
+
+<style>
+  :root{
+    --paper:#f3f4df;
+    --blue:#3aa0e6;
+    --orange:#f28b3c;
+    --red:#d94b3a;
+    --dark:#2b2b2b;
+    --card:#ffffff;
+    --muted:#6b7280;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #e5e7eb;
+    color:var(--dark);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+  }
+  .wrap{
+    width:min(920px, 100%);
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:14px;
+  }
+  .topbar{
+    background: linear-gradient(90deg, rgba(58,160,230,.18), rgba(242,139,60,.18), rgba(217,75,58,.18));
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:18px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .logo{
+    width:44px;height:44px;
+    border-radius:14px;
+    background: var(--paper);
+    border:2px solid rgba(0,0,0,.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+  }
+  .brand h1{
+    margin:0;
+    font-size:16px;
+    letter-spacing:.3px;
+  }
+  .brand p{
+    margin:2px 0 0 0;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .pill{
+    padding:8px 12px;
+    border-radius:999px;
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    font-size:12px;
+    color:#111827;
+    white-space:nowrap;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid rgba(0,0,0,.10);
+    border-radius:18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    overflow:hidden;
+  }
+  .cardHead{
+    padding:14px 16px;
+    border-bottom:1px dashed rgba(0,0,0,.12);
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .badge{
+    width:40px;height:40px;
+    border-radius:14px;
+    background: rgba(58,160,230,.14);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+  }
+  .cardHead h2{
+    margin:0;
+    font-size:14px;
+  }
+  .cardHead .sub{
+    margin:4px 0 0 0;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.35;
+  }
+  .content{
+    padding:16px;
+    display:grid;
+    gap:12px;
+  }
+  .row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width:760px){
+    .row{grid-template-columns:1fr;}
+  }
+  label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.2px;
+    margin-bottom:6px;
+  }
+  input, select{
+    width:100%;
+    padding:12px 12px;
+    border-radius:14px;
+    border:1px solid rgba(0,0,0,.14);
+    outline:none;
+    background:#fff;
+    font-size:14px;
+  }
+  input:focus, select:focus{
+    border-color: rgba(58,160,230,.7);
+    box-shadow: 0 0 0 4px rgba(58,160,230,.15);
+  }
+  .actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:2px;
+  }
+  button{
+    border:none;
+    cursor:pointer;
+    padding:12px 14px;
+    border-radius:14px;
+    font-weight:900;
+    letter-spacing:.2px;
+    font-size:13px;
+  }
+  .btnPrimary{
+    background: linear-gradient(90deg, var(--blue), #2f87c6);
+    color:white;
+  }
+  .btnGhost{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.14);
+    color:#111827;
+  }
+  .help{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.45;
+    padding:0 16px 16px 16px;
+  }
+  .msg{
+    margin-top:8px;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid rgba(0,0,0,.10);
+    background: rgba(242,139,60,.08);
+    font-size:12px;
+    display:none;
+  }
+  .msg.ok{ background: rgba(16,185,129,.10); }
+  .msg.err{ background: rgba(239,68,68,.10); }
+  code.small{
+    font-size:11px;
+    padding:2px 6px;
+    border-radius:8px;
+    background: rgba(0,0,0,.05);
+    border:1px solid rgba(0,0,0,.08);
+  }
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">F</div>
+        <div>
+          <h1>COLETOR DE CERTIFICADOS — FALANGE</h1>
+          <p>Escolha sua escola e turma, anexe o certificado (PNG ou PDF) no formulário.</p>
+        </div>
+      </div>
+      <div class="pill">Envio rápido • Organizado por turma</div>
+    </div>
+
+    <div class="card">
+      <div class="cardHead">
+        <div class="badge">📎</div>
+        <div>
+          <h2>Enviar Certificado</h2>
+          <div class="sub">
+            Preencha <b>Nome</b>, selecione <b>Escola</b> e <b>Turma</b>.
+            Depois clique em <b>ABRIR COLETOR</b> para anexar seu certificado.
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- =====================================================
+          ✅ CAMPOS DO ALUNO
+          - Nome
+          - Escola
+          - Turma (filtrada pela escola)
+        ====================================================== -->
+        <div>
+          <label for="nome">NOME DO ALUNO</label>
+          <input id="nome" type="text" placeholder="Ex.: MARIA EDUARDA" autocomplete="name" />
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="escola">ESCOLA</label>
+            <select id="escola"></select>
+          </div>
+
+          <div>
+            <label for="turma">TURMA</label>
+            <select id="turma"></select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btnPrimary" id="btnAbrir">ABRIR COLETOR (GOOGLE FORMS)</button>
+          <button class="btnGhost" id="btnCopiar">COPIAR LINK PRONTO</button>
+          <button class="btnGhost" id="btnLimpar">LIMPAR</button>
+        </div>
+
+        <div id="msg" class="msg"></div>
+
+      </div>
+
+      <div class="help">
+        <b>Importante:</b> no Google Forms, você vai anexar o certificado (PNG ou PDF) e enviar.<br>
+        <b>Dica Falange:</b> se quiser, você pode colocar este portal como link final do seu jogo/atividade.<br><br>
+
+        <b>Onde adicionar novas turmas?</b> No código, procure por:
+        <code class="small">const ESCOLAS = { ... }</code>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* =========================================================
+   ✅ CONFIGURAÇÃO CENTRAL (EDITÁVEL)
+   AQUI você adiciona/remova escolas e turmas quando quiser.
+   ========================================================= */
+
+/* 1) LISTA DE ESCOLAS E TURMAS
+   - Formato:
+     "NOME DA ESCOLA": ["TURMA 1", "TURMA 2", ...]
+*/
+const ESCOLAS = {
+  "ESCOLA ESTADUAL NANCY NINA DA COSTA": ["331", "332", "2 ETAPA A"],
+  "ESCOLA ESTADUAL GABRIEL ALMEIDA CAFÉ": ["392","3102", "3112", "3122", "3132", "3142", "3152", "3162", "292", "2102", "2112", "2122"]
+};
+
+
+/* 2) LINK BASE DO SEU GOOGLE FORMS (NÃO MEXER NA URL)
+   - Esse é o link que você me enviou.
+*/
+const FORMS_BASE =
+  "https://docs.google.com/forms/d/e/1FAIpQLSduM7xUuuyVYIXyaiRkAvK_egc3WMVgHx3S7xMUwkM-MJkfVA/viewform?usp=pp_url";
+
+/* 3) IDs dos campos do Forms (NÃO MEXER)
+   - Extraídos do seu link pré-preenchido:
+*/
+const ENTRY_NOME   = "entry.1005017547";
+const ENTRY_ESCOLA = "entry.28923289";
+const ENTRY_TURMA  = "entry.465466983";
+
+/* =========================================================
+   ✅ LÓGICA DO PORTAL (NÃO PRECISA MEXER)
+   ========================================================= */
+
+const elNome   = document.getElementById("nome");
+const elEscola = document.getElementById("escola");
+const elTurma  = document.getElementById("turma");
+const elMsg    = document.getElementById("msg");
+
+function showMsg(text, type=""){
+  elMsg.textContent = text;
+  elMsg.className = "msg" + (type ? " " + type : "");
+  elMsg.style.display = "block";
+  clearTimeout(showMsg._t);
+  showMsg._t = setTimeout(()=>{ elMsg.style.display="none"; }, 5500);
+}
+
+function toUpperSafe(s){
+  return (s || "").toString().trim().toUpperCase();
+}
+
+function fillSelect(selectEl, options, placeholder){
+  selectEl.innerHTML = "";
+  const ph = document.createElement("option");
+  ph.value = "";
+  ph.textContent = placeholder;
+  ph.disabled = true;
+  ph.selected = true;
+  selectEl.appendChild(ph);
+
+  options.forEach(opt=>{
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt;
+    selectEl.appendChild(o);
+  });
+}
+
+function init(){
+  const escolas = Object.keys(ESCOLAS);
+  if(!escolas.length){
+    fillSelect(elEscola, [], "CADASTRE UMA ESCOLA NO CÓDIGO");
+    fillSelect(elTurma, [], "CADASTRE UMA TURMA NO CÓDIGO");
+    showMsg("Nenhuma escola cadastrada. Edite o bloco ESCOLAS no código.", "err");
+    return;
+  }
+
+  fillSelect(elEscola, escolas, "SELECIONE A ESCOLA");
+  fillSelect(elTurma, [], "SELECIONE A TURMA");
+
+  elEscola.addEventListener("change", ()=>{
+    const esc = elEscola.value;
+    const turmas = ESCOLAS[esc] || [];
+    fillSelect(elTurma, turmas, "SELECIONE A TURMA");
+  });
+
+  document.getElementById("btnAbrir").addEventListener("click", ()=>{
+    const link = buildLink();
+    if(!link) return;
+    window.open(link, "_blank", "noopener,noreferrer");
+    showMsg("Formulário aberto! Agora é só anexar o certificado (PNG/PDF) e enviar.", "ok");
+  });
+
+  document.getElementById("btnCopiar").addEventListener("click", async ()=>{
+    const link = buildLink();
+    if(!link) return;
+    try{
+      await navigator.clipboard.writeText(link);
+      showMsg("Link copiado! Você pode colar no WhatsApp, QR Code, ou no seu jogo.", "ok");
+    }catch(e){
+      showMsg("Não consegui copiar automaticamente. Selecione e copie manualmente:\n" + link, "err");
+      console.log(link);
+    }
+  });
+
+  document.getElementById("btnLimpar").addEventListener("click", ()=>{
+    elNome.value = "";
+    elEscola.selectedIndex = 0;
+    fillSelect(elTurma, [], "SELECIONE A TURMA");
+    showMsg("Limpo. Preencha novamente.", "ok");
+  });
+}
+
+function buildLink(){
+  const nome   = toUpperSafe(elNome.value);
+  const escola = elEscola.value;
+  const turma  = elTurma.value;
+
+  if(!nome){
+    showMsg("Preencha o NOME do aluno.", "err");
+    elNome.focus();
+    return null;
+  }
+  if(!escola){
+    showMsg("Selecione a ESCOLA.", "err");
+    elEscola.focus();
+    return null;
+  }
+  if(!turma){
+    showMsg("Selecione a TURMA.", "err");
+    elTurma.focus();
+    return null;
+  }
+
+  const qs =
+    "&" + ENTRY_NOME   + "=" + encodeURIComponent(nome) +
+    "&" + ENTRY_ESCOLA + "=" + encodeURIComponent(escola) +
+    "&" + ENTRY_TURMA  + "=" + encodeURIComponent(turma);
+
+  return FORMS_BASE + qs;
+}
+
+init();
+</script>
+</body>
+</html>
